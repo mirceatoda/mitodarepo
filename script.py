@@ -1,5 +1,7 @@
 import time
 
-while True:
-    print('something')
-    time.sleep(60)     
+print('blabla')
+
+# while True:
+#     print('something')
+#     time.sleep(60)     
