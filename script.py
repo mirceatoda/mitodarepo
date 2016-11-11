@@ -1,7 +1,7 @@
 import time
 
 print('something')
-time.sleep(5)
+# time.sleep(5)
 print('something')
 # time.sleep(10)
 # print('something')
