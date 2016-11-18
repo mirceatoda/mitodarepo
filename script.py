@@ -1,15 +1,7 @@
 import time
 
-print('something')
+print('something1')
 time.sleep(5)
-print('something')
+print('something2')
 time.sleep(5)
-print('something')
-time.sleep(5)
-print('something')
-time.sleep(5)
-print('something')
-time.sleep(5)
-print('something')
-time.sleep(5)
-print('something')
+print('something3')
