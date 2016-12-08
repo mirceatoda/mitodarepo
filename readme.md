@@ -2,7 +2,6 @@
 
 Bower Component for a simple AngularJS Markdown directive using [Showdown](https://github.com/coreyti/showdown). Based on [this excellent tutorial](http://blog.angularjs.org/2012/05/custom-components-part-1.html) by [@johnlinquist](https://twitter.com/johnlindquist).
 
-ajsbnfouasdbfoiasdnfoisadn
 ## Usage
 1. `bower install angular-markdown-directive`
 2. Include `angular-sanitize.js`. It should be located at `bower_components/angular-sanitize/`.
