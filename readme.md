@@ -15,7 +15,7 @@ Bower Component for a simple AngularJS Markdown directive using [Showdown](https
 <btf-markdown>#Markdown directive *It works!*</btf-markdown>
 ```
 
-You can also bind the markdown input to a scope variable:
+You can also bind the markdown input to a scope variable::
 
 ```html
 <div btf-markdown="markdown">
