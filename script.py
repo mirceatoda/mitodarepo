@@ -1,1 +1,1 @@
-script.py content
+print("bla")
