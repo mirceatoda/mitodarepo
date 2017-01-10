@@ -1,514 +1,189 @@
-![Showdown][sd-logo]
+# Dillinger
 
-Showdown is a Javascript Markdown to HTML converter, based on the original works by John Gruber. It can be used client side (in the browser) or server side (with Node or io). 
+[![N|Solid](https://cldup.com/dTxpPi9lDf.thumb.png)](https://nodesource.com/products/nsolid)
 
+Dillinger is a cloud-enabled, mobile-ready, offline-storage, AngularJS powered HTML5 Markdown editor.
 
+  - Type some Markdown on the left
+  - See HTML in the right
+  - Magic
 
-# Installation
+You can also:
+  - Import and save files from GitHub, Dropbox, Google Drive and One Drive
+  - Drag and drop files into Dillinger
+  - Export documents as Markdown, HTML and PDF
 
+Markdown is a lightweight markup language based on the formatting conventions that people naturally use in email.  As [John Gruber] writes on the [Markdown site][df1]
 
-You can download the latest release tarball directly from [releases][releases]
+> The overriding design goal for Markdown's
+> formatting syntax is to make it as readable
+> as possible. The idea is that a
+> Markdown-formatted document should be
+> publishable as-is, as plain text, without
+> looking like it's been marked up with tags
+> or formatting instructions.
 
-bower install s
+This text you see here is *actually* written in Markdown! To get a feel for Markdown's syntax, type some text into the left window and watch the results in the right.
 
-## npm (server-side)
+### Tech
 
-    npm install showdown
+Dillinger uses a number of open source projects to work properly:
 
-## CDN
+* [AngularJS] - HTML enhanced for web apps!
+* [Ace Editor] - awesome web-based text editor
+* [markdown-it] - Markdown parser done right. Fast and easy to extend.
+* [Twitter Bootstrap] - great UI boilerplate for modern web apps
+* [node.js] - evented I/O for the backend
+* [Express] - fast node.js network app framework [@tjholowaychuk]
+* [Gulp] - the streaming build system
+* [keymaster.js] - awesome keyboard handler lib by [@thomasfuchs]
+* [jQuery] - duh
 
-You can also use one of several CDNs available: 
+And of course Dillinger itself is open source with a [public repository][dill]
+ on GitHub.
 
-* rawgit CDN
+### Installation
 
-        https://cdn.rawgit.com/showdownjs/showdown/<version tag>/dist/showdown.min.js
+Dillinger requires [Node.js](https://nodejs.org/) v4+ to run.
 
-* cdnjs
+Download and extract the [latest pre-built release](https://github.com/joemccann/dillinger/releases).
 
-        https://cdnjs.cloudflare.com/ajax/libs/showdown/<version tag>/showdown.min.js
+Install the dependencies and devDependencies and start the server.
 
-
-[sd-logo]: https://raw.githubusercontent.com/showdownjs/logo/master/dist/logo.readme.png
-[releases]: https://github.com/showdownjs/showdown/releases
-[atx]: http://www.aaronsw.com/2002/atx/intro
-[setext]: https://en.wikipedia.org/wiki/Setext
-
----------
-
-# Syntax
-
-
-## Introduction
-
-Showdown was created by John Fraser as a direct port of the original parser written by markdown's creator, John Gruber. Although Showdown has evolved since its inception, in "vanilla mode", it tries to follow the [original markdown spec][md-spec] (henceforth refereed as vanilla) as much as possible. There are, however, a few important differences, mainly due to inconsistencies in the original spec, which we addressed following the author's advice as stated in the [markdown's "official" newsletter][md-newsletter].
-
-Showdown also support "extra" syntax not defined in the original spec as opt-in features. This means new syntax elements are not enabled by default and require users to enable them through options.
-
-This document provides a quick description the syntax supported and the differences in output from the original markdown.pl implementation.
-
-## Paragraphs
-
-Paragraphs in Showdown are just **one or more lines of consecutive text** followed by one or more blank lines.
-
-```md
-On July 2, an alien mothership entered Earth's orbit and deployed several dozen 
-saucer-shaped "destroyer" spacecraft, each 15 miles (24 km) wide.
-    
-On July 3, the Black Knights, a squadron of Marine Corps F/A-18 Hornets, 
-participated in an assault on a destroyer near the city of Los Angeles.
+```sh
+$ cd dillinger
+$ npm install -d
+$ node app
 ```
 
-The implication of the “one or more consecutive lines of text” is that Showdown supports 
-“hard-wrapped” text paragraphs. This means the following examples produce the same output:
+For production environments...
 
-```md
-A very long line of text
+```sh
+$ npm install --production
+$ npm run predeploy
+$ NODE_ENV=production node app
 ```
 
-```md
-A very
-long line
-of text
+### Plugins
+
+Dillinger is currently extended with the following plugins
+
+* Dropbox
+* Github
+* Google Drive
+* OneDrive
+
+Readmes, how to use them in your own application can be found here:
+
+* [plugins/dropbox/README.md] [PlDb]
+* [plugins/github/README.md] [PlGh]
+* [plugins/googledrive/README.md] [PlGd]
+* [plugins/onedrive/README.md] [PlOd]
+
+### Development
+
+Want to contribute? Great!
+
+Dillinger uses Gulp + Webpack for fast developing.
+Make a change in your file and instantanously see your updates!
+
+Open your favorite Terminal and run these commands.
+
+First Tab:
+```sh
+$ node app
 ```
 
-If you DO want to add soft line breaks (which translate to `<br>` in HTML) to a paragraph, 
-you can do so by adding to space characters to the end of the line (`  `).
-
-## Headings
-
-You can create a heading by adding one or more # symbols before your heading text. The number of # you use will determine the size of the heading. This is similar to [**atx style**][atx].
-
-```md
-# The largest heading (an <h1> tag)
-## The second largest heading (an <h2> tag)
-…
-###### The 6th largest heading (an <h6> tag)
+Second Tab:
+```sh
+$ gulp watch
 ```
 
-You can also use [**setext style**][setext] headings.
+(optional) Third:
+```sh
+$ karma start
+```
+#### Building for source
+For production release:
+```sh
+$ gulp build --prod
+```
+Generating pre-built zip archives for distribution:
+```sh
+$ gulp build dist --prod
+```
+### Docker
+Dillinger is very easy to install and deploy in a Docker container.
 
-```md
-This is an H1
-=============
-    
-This is an H2
--------------
+By default, the Docker will expose port 80, so change this within the Dockerfile if necessary. When ready, simply use the Dockerfile to build the image.
+
+```sh
+cd dillinger
+npm run-script build-docker
+```
+This will create the dillinger image and pull in the necessary dependencies. Moreover, this uses a _hack_ to get a more optimized `npm` build by copying the dependencies over and only installing when the `package.json` itself has changed.  Look inside the `package.json` and the `Dockerfile` for more details on how this works.
+
+Once done, run the Docker image and map the port to whatever you wish on your host. In this example, we simply map port 8000 of the host to port 80 of the Docker (or whatever port was exposed in the Dockerfile):
+
+```sh
+docker run -d -p 8000:8080 --restart="always" <youruser>/dillinger:latest
 ```
 
-Showdown generates bookmarks anchors in titles automatically, by adding an id property to an heading.
-This behavior can be modified or disabled with options. See the option section in the README.md file
-for more information.
+Verify the deployment by navigating to your server address in your preferred browser.
 
-**Note:**    
-In live preview editors, when a paragraph is followed by a list it can cause an awkward effect.
-
-![awkward effect](http://i.imgur.com/YQ9iHTL.gif)
-
-You can prevent this by enabling the option "smoothPreview".
-
-
-## Blockquotes
-
-You can indicate blockquotes with a >.
-
-```md
-In the words of Abraham Lincoln:
-    
-> Pardon my french
+```sh
+127.0.0.1:8000
 ```
 
-Blockquotes can have multiple paragraphs and can have other block elements inside.
+#### Kubernetes + Google Cloud
 
-```md
-> A paragraph of text
->
-> Another paragraph
->
-> - A list
-> - with items
-```
+See [KUBERNETES.md](https://github.com/joemccann/dillinger/blob/master/KUBERNETES.md)
 
-## Bold and Italic
 
-You can make text bold or italic.
+#### docker-compose.yml
 
-    *This text will be italic*
-    **This text will be bold**
+Change the path for the nginx conf mounting path to your full path, not mine!
 
-Both bold and italic can use either a \* or an \_ around the text for styling. This allows you to combine both bold and italic if needed.
+### N|Solid and NGINX
 
-    **Everyone _must_ attend the meeting at 5 o'clock today.**
+More details coming soon.
 
-## Strikethrough
 
-With the option "strikethrough" enabled, Showdown supports strikethrough elements.
-The syntax is the same as GFM, that is, by adding two tilde (`~~`) characters around
-a word or groups of words.
+### Todos
 
-```md
-a ~~strikethrough~~ element
-```
+ - Write Tests
+ - Rethink Github Save
+ - Add Code Comments
+ - Add Night Mode
 
-## Code formatting
+License
+----
 
-### Inline formats
+MIT
 
-Use single backticks (`) to format text in a special monospace format. Everything within the backticks appear as-is, with no other special formatting.
 
-    Here's an idea: why don't we take `SuperiorProject` and turn it into `**Reasonable**Project`.
+**Free Software, Hell Yeah!**
 
-### Multiple lines
+[//]: # (These are reference links used in the body of this note and get stripped out when the markdown processor does its job. There is no need to format nicely because it shouldn't be seen. Thanks SO - http://stackoverflow.com/questions/4823468/store-comments-in-markdown-syntax)
 
-To create blocks of code you should indent it by four spaces.
 
-```
-    this is a piece
-    of
-    code
-```
+   [dill]: <https://github.com/joemccann/dillinger>
+   [git-repo-url]: <https://github.com/joemccann/dillinger.git>
+   [john gruber]: <http://daringfireball.net>
+   [@thomasfuchs]: <http://twitter.com/thomasfuchs>
+   [df1]: <http://daringfireball.net/projects/markdown/>
+   [markdown-it]: <https://github.com/markdown-it/markdown-it>
+   [Ace Editor]: <http://ace.ajax.org>
+   [node.js]: <http://nodejs.org>
+   [Twitter Bootstrap]: <http://twitter.github.com/bootstrap/>
+   [keymaster.js]: <https://github.com/madrobby/keymaster>
+   [jQuery]: <http://jquery.com>
+   [@tjholowaychuk]: <http://twitter.com/tjholowaychuk>
+   [express]: <http://expressjs.com>
+   [AngularJS]: <http://angularjs.org>
+   [Gulp]: <http://gulpjs.com>
 
-If the options `ghCodeBlocks` is activated (which is by default), you can use triple backticks (```) to format text as its own distinct block.
-
-    Check out this neat program I wrote:
-
-    ```
-    x = 0
-    x = 2 + 2
-    what is x
-    ```
-
-## Lists
-
-Showdown supports ordered (numbered) and unordered (bulleted) lists.
-
-### Unordered lists
-
-You can make an unordered list by preceding list items with either a *, a - or a +. Markers are interchangeable too.
-
-```md
-* Item
-+ Item
-- Item
-```
-
-### Ordered lists
-
-You can make an ordered list by preceding list items with a number.
-
-```md
-1. Item 1
-2. Item 2
-3. Item 3
-```
-
-It’s important to note that the actual numbers you use to mark the list have no effect on the HTML output Markdown produces. So you can use the same number in all items if you wish to.
-
-### List syntax
-
-List markers typically start at the left margin, but may be indented by up to three spaces. 
-
-```md
-   * this is valid
-   * this is too  
-```
-
-List markers must be followed by one or more spaces or a tab.
-
-To make lists look nice, you can wrap items with hanging indents:
-
-```md
-*   Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
-    Aliquam hendrerit mi posuere lectus. Vestibulum enim wisi,
-    viverra nec, fringilla in, laoreet vitae, risus.
-*   Donec sit amet nisl. Aliquam semper ipsum sit amet velit.
-    Suspendisse id sem consectetuer libero luctus adipiscing.
-```
-
-But if you want to be lazy, you don’t have to
-
-If one list item is separated by a blank line, Showdown will wrap the items in `<p>` tags in the HTML output.
-So this input:
-
-```md
-* Bird
-
-* Magic
-* Johnson
-```
-
-Results in:
-
-```html
-<ul>
-<li><p>Bird</p></li>
-<li><p>Magic</p></li>
-<li><p>Johnson</p></li>
-</ul>
-```
-
-This behavior differs from other markdown implementations such as GFM (github) or commonmark.
-
-### Nested blocks
-
-List items may consist of multiple paragraphs. Each subsequent paragraph in a list item must be indented by either 4 spaces or one tab:
-
-```md
-1.  This is a list item with two paragraphs. Lorem ipsum dolor
-    sit amet, consectetuer adipiscing elit. Aliquam hendrerit
-    mi posuere lectus.
-
-    Vestibulum enim wisi, viverra nec, fringilla in, laoreet
-    vitae, risus. Donec sit amet nisl. Aliquam semper ipsum
-    sit amet velit.
-
-2.  Suspendisse id sem consectetuer libero luctus adipiscing.
-```
-
-This is valid for other block elements such as blockquotes:
-
-```md
-*   A list item with a blockquote:
-
-    > This is a blockquote
-    > inside a list item.
-```
-
-or event other lists.
-
-### Nested lists
-
-You can create nested lists by indenting list items by **four** spaces.
-
-```md
-1.  Item 1
-    1. A corollary to the above item.
-    2. Yet another point to consider.
-2.  Item 2
-    * A corollary that does not need to be ordered.
-    * This is indented four spaces
-    * You might want to consider making a new list.
-3.  Item 3
-```
-
-This behavior is consistent with the original spec but differs from other implementations suck as GFM or commonmark. Prior to version 1.5, you just needed to indent two spaces for it to be considered a sublist.
-
-To nest a third (or more) sublist level, you need to indent 4 extra spaces (or 1 extra tab) for each level.
-
-```
-1.  level 1
-    1.  Level 2
-        *   Level 3
-    2.  level 2
-        1.  Level 3
-1.  Level 1
-```
-
-### Nested code blocks
-
-You can nest fenced codeblocks the same way you nest other block elements, by indenting by fours spaces or a tab:
-
-```md
-1.  Some code:
-
-    ```js
-    var foo = 'bar';
-    console.log(foo);
-    ```
-```
-
-To put a *indented style* code block within a list item, the code block needs to be indented twice — 8 spaces or two tabs:
-
-```md
-1.  Some code:
-
-        var foo = 'bar';
-        console.log(foo);
-```
-
-## Links
-
-### Simple
-
-If you wrap a valid URL or email in `<>` it will be turned into a link whose text is the link itself.
-
-```md
-link to <http://www.google.com/>
-
-this is my email <somedude@mail.com>
-```
-
-In the case of email addreses, Showdown will also perform a bit of randomized decimal and hex entity-encoding to help obscure your address from address-harvesting spambots
-
-With the option "simplifiedAutoLink" enabled, Showdown will turn every valid URL it finds in the text body
-to links automatically for you, without the need to wrap them in `<>`.
-
-```md
-link to http://www.google.com/
-
-this is my email somedude@mail.com
-```
-
-### Inline
-
-You can create an inline link by wrapping link text in brackets ( `[ ]` ), and then wrapping the link in parentheses ( `( )` ).
-
-For example, to create a hyperlink to github.com/showdownjs/showdown, with a link text that says, Get Showdown!, you'd write this in Markdown: `[Get Showdown!](https://github.com/showdownjs/showdown)`.
-
-### Reference Style
-
-You can also use the reference style, like this:
-
-```
-this is a [link to google][1]
-
-some other text
-
-[1]: www.google.com
-```
-
-## Images
-
-Markdown uses an image syntax that is intended to resemble the syntax for links, also allowing for two styles: inline and reference.
-
-### Inline
-
-Inline image syntax looks like this:
-
-    ![Alt text](/path/to/img.jpg)
-
-    ![Alt text](/path/to/img.jpg "Optional title")
-
-That is:
-
- + An exclamation mark: !;
- + followed by a set of square brackets, containing the alt attribute text for the image;
- + followed by a set of parentheses, containing the URL or path to the image, and an optional title attribute enclosed in double or single quotes.
-
-
-### Reference Style
-
-Reference-style image syntax looks like this:
-
-    ![Alt text][id]
-
-Where “id” is the name of a defined image reference. Image references are defined using syntax identical to link references:
-
-    [id]: url/to/image  "Optional title attribute"
-
-### Image dimensions
-
-When the option `parseImgDimension`is activated, you can also define the image dimensions, like this:
-
-    ![Alt text](/path/to/img.jpg =250x250 "Optional title")
-
-## Tables
-
-Tables aren't part of the core Markdown spec, but they are part of GFM and Showdown supports them by turning on the option `tables`.
-
-Colons can be used to align columns.
-
-In the new version, the outer pipes (`|`) are optional, matching GFM spec. 
-
-You also don't need to make the raw Markdown line up prettily.
-
-You can also use other markdown syntax inside them.
-
-```
-| Tables        | Are           | Cool  |
-| ------------- |:-------------:| -----:|
-| **col 3 is**  | right-aligned | $1600 |
-| col 2 is      | *centered*    |   $12 |
-| zebra stripes | ~~are neat~~  |    $1 |
-```
-
-## Escaping markdown entities
-
-Showdown allows you to use backslash (`\`) escapes to generate literal characters which would otherwise have special meaning in markdown’s syntax. For example, if you wanted to surround a word with literal underscores (instead of an HTML `<em>` tag), you can use backslashes before the unserscores, like this:
-
-```md
-\_literal underscores\_
-```
-
-Showdown provides backslash escapes for the following characters:
-
-```
-\   backslash
-`   backtick
-*   asterisk
-_   underscore
-{}  curly braces
-[]  square brackets
-()  parentheses
-#   hash mark
-+   plus sign
--   minus sign (hyphen)
-.   dot
-!   exclamation mark
-```
-
-
-## Known differences and Gotchas
-
-In most cases, Showdown's output is identical to that of Perl Markdown v1.0.2b7.  What follows is a list of all known deviations.  Please file an issue if you find more.
-
-* **Since version 1.4.0, showdown supports the markdown="1" attribute**, but for older versions, this attribute is ignored. This means:
-
-        <div markdown="1">
-             Markdown does *not* work in here.
-        </div>
-
-
-* You can only nest square brackets in link titles to a
-    depth of two levels:
-
-        [[fine]](http://www.github.com/)
-        [[[broken]]](http://www.github.com/)
-
-    If you need more, you can escape them with backslashes.
-
-
-* A list is **single paragraph** if it has only **1 line-break separating items** and it becomes **multi paragraph if ANY of its items is separated by 2 line-breaks**:
-
-   ```md
-    - foo
-   
-    - bar
-    - baz
-   ```
-   becomes
-
-    ```html
-    <ul>
-      <li><p>foo</p></li>
-      <li><p>bar</p></li>
-      <li><p>baz</p></li>
-    </ul>
-    ```
-
-    This new ruleset is based on the comments of Markdown's author John Gruber in the [Markdown discussion list][md-newsletter].
-
-
-
-* Markdown.pl creates empty title attributes for
-    inline-style images:
-
-        Here's an empty title on an inline-style
-        ![image](http://w3.org/Icons/valid-xhtml10).
-
-    Showdown doesn't
-
-
-* With crazy input, Markdown will mistakenly put `<strong>` or `<em>` tags in URLs:
-
-    ```html
-    <a href="<*Markdown adds em tags in here*>">
-    improbable URL
-    </a>
-    ```
-    
-    Showdown won't (for most cases anyway).  But still, don't do that.
-
-[md-spec]: http://daringfireball.net/projects/markdown/
-[md-newsletter]: https://pairlist6.pair.net/mailman/listinfo/markdown-discuss
-[atx]: http://www.aaronsw.com/2002/atx/intro
-[setext]: https://en.wikipedia.org/wiki/Setext
+   [PlDb]: <https://github.com/joemccann/dillinger/tree/master/plugins/dropbox/README.md>
+   [PlGh]:  <https://github.com/joemccann/dillinger/tree/master/plugins/github/README.md>
+   [PlGd]: <https://github.com/joemccann/dillinger/tree/master/plugins/googledrive/README.md>
+   [PlOd]: <https://github.com/joemccann/dillinger/tree/master/plugins/onedrive/README.md>
