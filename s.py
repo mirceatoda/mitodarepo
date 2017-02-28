@@ -1,1 +1,1 @@
-print("script.py")
+print("s.py")
