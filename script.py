@@ -1,2 +1,1 @@
 print("script.py")
-asds
